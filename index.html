@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ガチャゲーム</title>
+
+<style>
+body{
+    font-family: sans-serif;
+    background: linear-gradient(135deg,#4facfe,#00f2fe);
+    text-align:center;
+    color:white;
+    margin-top:100px;
+}
+
+h1{
+    font-size:40px;
+}
+
+#result{
+    margin-top:40px;
+    font-size:30px;
+    background:rgba(0,0,0,0.3);
+    padding:20px;
+    border-radius:10px;
+    display:inline-block;
+    min-width:250px;
+}
+
+button{
+    margin-top:30px;
+    font-size:20px;
+    padding:15px 40px;
+    border:none;
+    border-radius:10px;
+    background:#ffcc00;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#ffaa00;
+}
+
+.star{
+    font-size:35px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🎮 ガチャゲーム</h1>
+
+<button onclick="drawGacha()">ガチャを引く！</button>
+
+<div id="result">
+結果がここに表示されます
+</div>
+
+<script>
+
+const characters = [
+{ name:"村人", rarity:1, chance:40 },
+{ name:"戦士", rarity:2, chance:30 },
+{ name:"魔法使い", rarity:3, chance:20 },
+{ name:"ドラゴンナイト", rarity:4, chance:8 },
+{ name:"伝説の勇者", rarity:5, chance:2 }
+];
+
+function drawGacha(){
+
+let rand = Math.random()*100;
+let total = 0;
+
+for(let c of characters){
+
+total += c.chance;
+
+if(rand <= total){
+
+let stars = "★".repeat(c.rarity);
+
+document.getElementById("result").innerHTML =
+`<div class="star">${stars}</div>
+<strong>${c.name}</strong> が出た！`;
+
+break;
+
+}
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
