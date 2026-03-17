@@ -2,96 +2,133 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ガチャゲーム</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-POP & J-POP Idol Selection Game</title>
 <style>
-body{
-    font-family: sans-serif;
-    background: linear-gradient(135deg,#4facfe,#00f2fe);
-    text-align:center;
-    color:white;
-    margin-top:100px;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  text-align: center;
 }
 
-h1{
-    font-size:40px;
+h1 {
+  color: white;
+  margin-top: 20px;
 }
 
-#result{
-    margin-top:40px;
-    font-size:30px;
-    background:rgba(0,0,0,0.3);
-    padding:20px;
-    border-radius:10px;
-    display:inline-block;
-    min-width:250px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-button{
-    margin-top:30px;
-    font-size:20px;
-    padding:15px 40px;
-    border:none;
-    border-radius:10px;
-    background:#ffcc00;
-    cursor:pointer;
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
-button:hover{
-    background:#ffaa00;
+.idol-img {
+  width: 100%;
+  border-radius: 15px;
 }
 
-.star{
-    font-size:35px;
+.idol-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn {
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.like { background: #ff6b81; color: white; }
+.skip { background: #74b9ff; color: white; }
+
+.result {
+  margin-top: 20px;
+  color: white;
 }
 </style>
-
 </head>
 <body>
 
-<h1>🎮 ガチャゲーム</h1>
+<h1>アイドル選択ゲーム</h1>
+<div class="container">
+  <div class="card" id="idolCard">
+    <img id="idolImg" class="idol-img" src="">
+    <div class="idol-name" id="idolName"></div>
+  </div>
 
-<button onclick="drawGacha()">ガチャを引く！</button>
+  <div>
+    <button class="btn like" onclick="likeIdol()">好き！</button>
+    <button class="btn skip" onclick="nextIdol()">スキップ</button>
+  </div>
 
-<div id="result">
-結果がここに表示されます
+  <div class="result" id="result"></div>
 </div>
 
 <script>
+const idols = [
+  { name: "BTS ジョングク", img: "https://via.placeholder.com/400x300?text=Jungkook" },
+  { name: "BLACKPINK リサ", img: "https://via.placeholder.com/400x300?text=Lisa" },
+  { name: "TWICE モモ", img: "https://via.placeholder.com/400x300?text=Momo" },
+  { name: "Stray Kids ヒョンジン", img: "https://via.placeholder.com/400x300?text=Hyunjin" },
+  { name: "IVE ウォニョン", img: "https://via.placeholder.com/400x300?text=Wonyoung" },
+  { name: "NewJeans ハニ", img: "https://via.placeholder.com/400x300?text=Hanni" },
+  
+  // JO1
+  { name: "JO1 川西拓実", img: "https://via.placeholder.com/400x300?text=JO1+Takumi" },
+  { name: "JO1 白岩瑠姫", img: "https://via.placeholder.com/400x300?text=JO1+Ruki" },
+  { name: "JO1 河野純喜", img: "https://via.placeholder.com/400x300?text=JO1+Junki" },
 
-const characters = [
-{ name:"村人", rarity:1, chance:40 },
-{ name:"戦士", rarity:2, chance:30 },
-{ name:"魔法使い", rarity:3, chance:20 },
-{ name:"ドラゴンナイト", rarity:4, chance:8 },
-{ name:"伝説の勇者", rarity:5, chance:2 }
+  // INI
+  { name: "INI 木村柾哉", img: "https://via.placeholder.com/400x300?text=INI+Masaya" },
+  { name: "INI 西洸人", img: "https://via.placeholder.com/400x300?text=INI+Hiroto" },
+  { name: "INI 田島将吾", img: "https://via.placeholder.com/400x300?text=INI+Shogo" }
 ];
 
-function drawGacha(){
+let index = 0;
+let liked = [];
 
-let rand = Math.random()*100;
-let total = 0;
+function showIdol() {
+  if(index >= idols.length) {
+    document.getElementById("idolCard").style.display = "none";
+    document.querySelector(".like").style.display = "none";
+    document.querySelector(".skip").style.display = "none";
+    document.getElementById("result").innerHTML =
+      "あなたの推しは:<br>" + liked.join("<br>");
+    return;
+  }
 
-for(let c of characters){
-
-total += c.chance;
-
-if(rand <= total){
-
-let stars = "★".repeat(c.rarity);
-
-document.getElementById("result").innerHTML =
-`<div class="star">${stars}</div>
-<strong>${c.name}</strong> が出た！`;
-
-break;
-
+  document.getElementById("idolName").textContent = idols[index].name;
+  document.getElementById("idolImg").src = idols[index].img;
 }
 
+function likeIdol() {
+  liked.push(idols[index].name);
+  index++;
+  showIdol();
 }
 
+function nextIdol() {
+  index++;
+  showIdol();
 }
 
+showIdol();
 </script>
 
 </body>
